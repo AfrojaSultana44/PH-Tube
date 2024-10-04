@@ -50,7 +50,7 @@ if(data.length === 0){
   videoContainer.innerHTML = `
   <div class="min-h-[300px] w-full flex flex-col justify-center items-center gap-5">
   <img
-  src="public/images/Icon.png"
+  src="./public/images/Icon.png"
   />
   <h2 class="text-xl font-bold text-center">No content here in this category</h2>
   </div>
