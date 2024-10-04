@@ -1,11 +1,9 @@
-function getTimeString(time){
-    const hour = parseInt(time/3600)
-    const remainingSeconds = time%3600
-    const minute = parseInt(remainingSeconds/60)
-    return `${hour} hour ${minute} minute ago`
+function getTimeString(time) {
+  const hour = parseInt(time / 3600);
+  const remainingSeconds = time % 3600;
+  const minute = parseInt(remainingSeconds / 60);
+  return `${hour} hour ${minute} minute ago`;
 }
-
-
 
 const loadCategories = () => {
   fetch(" https://openapi.programming-hero.com/api/phero-tube/categories")
@@ -21,19 +19,32 @@ const loadVideos = () => {
     .catch((error) => console.log(error));
 };
 
+const loadCategoryVideos = (id) => {
+  fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
+    .then((res) => res.json())
+    .then((data) => displayVideos(data.category))
+    .catch((error) => console.log(error));
+};
+
 const displayCategories = (data) => {
   const categoryContainer = document.getElementById("category-container");
   data.forEach((item) => {
     // console.log(item);
-    const button = document.createElement("button");
-    button.classList = "btn";
-    button.innerText = item.category;
-    categoryContainer.appendChild(button);
+    const buttonContainer = document.createElement("div");
+    buttonContainer.innerHTML = `
+    <button onclick="loadCategoryVideos(${item.category_id})" class="btn">
+    ${item.category}
+    </button>
+    
+    `;
+
+    categoryContainer.appendChild(buttonContainer);
   });
 };
 
 const displayVideos = (data) => {
   const videoContainer = document.getElementById("video-container");
+  videoContainer.innerHTML = "";
   data.forEach((item) => {
     console.log(item);
     const card = document.createElement("div");
@@ -48,7 +59,9 @@ const displayVideos = (data) => {
         item.others.posted_date?.length == 0
           ? ""
           : `
-      <span class="absolute right-2 bottom-2 text-white bg-black p-1">${getTimeString(item.others.posted_date)}</span>
+      <span class="absolute right-2 bottom-2 text-white text-xs bg-black p-1">${getTimeString(
+        item.others.posted_date
+      )}</span>
         
         `
       }
