@@ -5,6 +5,14 @@ function getTimeString(time) {
   return `${hour} hour ${minute} minute ago`;
 }
 
+const removeBtnActiveColor = () => {
+  const buttons = document.getElementsByClassName("category-btn");
+  for (const btn of buttons) {
+    btn.style.cssText =
+      "background-color: #ffffff; color:rgba(17, 17, 17, 0.7);";
+  }
+};
+
 const loadCategories = () => {
   fetch(" https://openapi.programming-hero.com/api/phero-tube/categories")
     .then((res) => res.json())
@@ -22,7 +30,12 @@ const loadVideos = () => {
 const loadCategoryVideos = (id) => {
   fetch(`https://openapi.programming-hero.com/api/phero-tube/category/${id}`)
     .then((res) => res.json())
-    .then((data) => displayVideos(data.category))
+    .then((data) => {
+      removeBtnActiveColor();
+      const activeBtn = document.getElementById(`btn-${id}`);
+      activeBtn.style.cssText = "background-color: #f43f5e; color: white;";
+      displayVideos(data.category);
+    })
     .catch((error) => console.log(error));
 };
 
@@ -32,7 +45,7 @@ const displayCategories = (data) => {
     // console.log(item);
     const buttonContainer = document.createElement("div");
     buttonContainer.innerHTML = `
-    <button onclick="loadCategoryVideos(${item.category_id})" class="btn">
+    <button id="btn-${item.category_id}" onclick="loadCategoryVideos(${item.category_id})" class="btn category-btn">
     ${item.category}
     </button>
     
@@ -45,21 +58,19 @@ const displayCategories = (data) => {
 const displayVideos = (data) => {
   const videoContainer = document.getElementById("video-container");
   videoContainer.innerHTML = "";
-if(data.length === 0){
-  videoContainer.classList.remove("grid")
-  videoContainer.innerHTML = `
+  if (data.length === 0) {
+    videoContainer.classList.remove("grid");
+    videoContainer.innerHTML = `
   <div class="min-h-[300px] w-full flex flex-col justify-center items-center gap-5">
   <img
   src="./public/images/Icon.png"
   />
   <h2 class="text-xl font-bold text-center">No content here in this category</h2>
   </div>
-  `
-  return;
-
-}else{
-videoContainer.classList.add("grid")
-}
+  `;
+  } else {
+    videoContainer.classList.add("grid");
+  }
   data.forEach((item) => {
     console.log(item);
     const card = document.createElement("div");
