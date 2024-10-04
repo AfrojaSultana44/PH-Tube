@@ -20,8 +20,10 @@ const loadCategories = () => {
     .catch((error) => console.log(error));
 };
 
-const loadVideos = () => {
-  fetch("https://openapi.programming-hero.com/api/phero-tube/videos")
+const loadVideos = (searchText = "") => {
+  fetch(
+    `https://openapi.programming-hero.com/api/phero-tube/videos?title=${searchText}`
+  )
     .then((res) => res.json())
     .then((data) => displayVideos(data.videos))
     .catch((error) => console.log(error));
@@ -48,11 +50,11 @@ const loadDetails = async (videoId) => {
 };
 
 const displayDetails = (video) => {
-  console.log(video);
+  // console.log(video);
   const detailsContainer = document.getElementById("modal-content");
   detailsContainer.innerHTML = `
   <img
-  class="object-cover"
+  class="w-full object-cover"
   src=${video.thumbnail}
   />
   <p class="mt-4">${video.description}</p>
@@ -92,8 +94,9 @@ const displayVideos = (data) => {
   } else {
     videoContainer.classList.add("grid");
   }
+
   data.forEach((item) => {
-    console.log(item);
+    // console.log(item);
     const card = document.createElement("div");
     card.classList = "card card-compact";
     card.innerHTML = `
@@ -145,5 +148,9 @@ const displayVideos = (data) => {
   });
 };
 
+document.getElementById("search-input").addEventListener("keyup", (e) => {
+  // console.log("search text", e.target.value);
+  loadVideos(e.target.value);
+});
 loadCategories();
 loadVideos();
