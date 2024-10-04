@@ -39,6 +39,27 @@ const loadCategoryVideos = (id) => {
     .catch((error) => console.log(error));
 };
 
+const loadDetails = async (videoId) => {
+  // console.log(videoId)
+  const url = `https://openapi.programming-hero.com/api/phero-tube/video/${videoId}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  displayDetails(data.video);
+};
+
+const displayDetails = (video) => {
+  console.log(video);
+  const detailsContainer = document.getElementById("modal-content");
+  detailsContainer.innerHTML = `
+  <img
+  class="object-cover"
+  src=${video.thumbnail}
+  />
+  <p class="mt-4">${video.description}</p>
+  `;
+
+  document.getElementById("details_show_modal").showModal();
+};
 const displayCategories = (data) => {
   const categoryContainer = document.getElementById("category-container");
   data.forEach((item) => {
@@ -112,7 +133,11 @@ const displayVideos = (data) => {
        : ""
    }
    </div>
-   <p></p>
+<div>
+<button onclick="loadDetails('${
+      item.video_id
+    }')" class="btn btn-sm bg-rose-500 text-white font-semibold">Details</button>
+</div>
    </div>
    </div>
         `;

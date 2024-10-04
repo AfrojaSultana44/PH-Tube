@@ -46,6 +46,21 @@
         id="video-container"
         class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 py-10"
       ></section>
+      <section>
+        <button class="hidden btn" onclick="details_show_modal.showModal()">
+          open modal
+        </button>
+        <dialog id="details_show_modal" class="modal">
+          <div class="modal-box">
+            <div id="modal-content"></div>
+            <div class="modal-action">
+              <form method="dialog">
+                <button class="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
+      </section>
     </main>
     <script src="./js/video.js"></script>
   </body>
